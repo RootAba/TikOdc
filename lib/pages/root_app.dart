@@ -1,0 +1,146 @@
+import 'package:flutter/material.dart';
+import 'package:odktic/pages/home_page.dart';
+import 'package:odktic/theme/colors.dart';
+import 'package:odktic/widgets/tik_tok_icons.dart';
+import 'package:odktic/widgets/upload_icon.dart';
+import 'package:odktic/pages/page_profile.dart';
+
+class RootApp extends StatefulWidget {
+  @override
+  _RootAppState createState() => _RootAppState();
+}
+
+class _RootAppState extends State<RootApp> {
+  int pageIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: getBody(),
+      bottomNavigationBar: getFooter(),
+    );
+  }
+  Widget getBody(){
+    return IndexedStack(
+      index: pageIndex,
+      children: <Widget>[
+        HomePage(),
+        Center(
+          child: Text("Discover",style: TextStyle(
+            color: black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          ),),
+        ),
+        Center(
+          child: Text("Upload",style: TextStyle(
+            color: black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          ),),
+        ),
+        Center(
+          child: Text("All Activity",style: TextStyle(
+            color: black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          ),),
+        ),
+        ProfilePage(),
+       /* Center(
+          child: Text("Profile",style: TextStyle(
+            color: black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          ),),
+        )*/
+      ],
+    );
+  }
+
+  Widget getFooter() {
+    List bottomItems = [
+      {"icon":TikTokIcons.home, "label": "Home", "isIcon": true},
+      {"icon": TikTokIcons.search, "label": "Discover", "isIcon": true},
+      {"icon": "", "label": "", "isIcon": false},
+      {"icon": TikTokIcons.messages, "label": "Inbox", "isIcon": true},
+      {"icon": TikTokIcons.profile, "label": "Me", "isIcon": true}
+    ];
+    return Container(
+      height: 80,
+      width: double.infinity,
+      decoration: BoxDecoration(color: appBgColor),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20,top: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(bottomItems.length,(index){
+            return bottomItems[index]['isIcon'] ? 
+            InkWell(
+              onTap: (){
+                switch(index){
+                  case 0:
+                    selectedTab(index);
+                  //  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>()));
+                    break;
+                  case 1:
+                    selectedTab(index);
+                   // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>modeles()));
+                    break;
+                  case 2:
+                    selectedTab(index);
+                  //  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>settings()));
+                    break;
+                  case 3:
+                    selectedTab(index);
+                    //  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>settings()));
+                    break;
+                 /* case 4:
+                    selectedTab(index);
+                    //  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>settings()));
+                    break;*/
+                  case 4:
+
+                     Navigator.of(context).push(MaterialPageRoute(builder: (context) =>ProfilePage()));
+                    break;
+                }
+                selectedTab(index);
+              },
+                          child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                   bottomItems[index]['icon'],
+                    color: white ,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Center(
+                    child: Text(
+                      bottomItems[index]['label'],
+                      style: TextStyle(color: white, fontSize: 10),
+                    ),
+                  )
+                ],
+              ),
+            ) : 
+            InkWell(
+              onTap: (){
+                selectedTab(index);
+              },
+              child: UploadIcon()
+              );
+          }),
+        ),
+      ),
+    );
+  }
+  selectedTab(index){
+    setState(() {
+      pageIndex = index;
+    });
+  }
+}
+
+
